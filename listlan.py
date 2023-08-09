@@ -8,7 +8,7 @@ VERBOSE = 0
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import ARP, Ether, srp
 
-logging.basicConfig(filename='logs/lslan.log', level=logging.INFO)
+#logging.basicConfig(filename='logs/lslan.log', level=logging.INFO)
 
 def get_hostname(ip):
     try:
@@ -23,30 +23,27 @@ def get_hostname(ip):
 # print("Setting up IP range...")
 ip_range = "192.168.1.1/24"
 
-
-
 # Create ARP packet
-    
-logging.info("Creating ARP packet...")
+#logging.info("Creating ARP packet...")
 arp = ARP(pdst=ip_range)
 
-logging.info("setting up ether...")
+#logging.info("setting up ether...")
   
 ether = Ether(dst="ff:ff:ff:ff:ff:ff")
 packet = ether/arp
 
 
-logging.info("Checking available ip addresses...")
+#logging.info("Checking available ip addresses...")
 # Send packet and get response
-result = srp(packet, timeout=2, verbose=0)[0]
+result = srp(packet, timeout=10, verbose=0)[0]
 
 # Print device details
-print("IP                              MAC")
-print("----------------------------------------------")
+# print("IP                              MAC")
+# print("----------------------------------------------")
 
 # available fields
 # received.psrc => ip address
 # received.hwsrc => mac address
 for sent, received in result:
-   print(get_hostname(received.psrc).ljust(30) + " " + received.psrc + " ")
+   print(get_hostname(received.psrc) + "(" +  received.psrc + ") \n")
 
